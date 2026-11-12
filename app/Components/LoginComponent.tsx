@@ -1,57 +1,78 @@
+
 'use client'
-import Link from 'next/link'
+
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
 import { useUsuario } from '../Provider/ProviderUsuario'
 
 export default function LoginComponent() {
 
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [mensaje, setMensaje] = useState('')
 
-  const { setNombreUsuario } = useUsuario()
+    const { setNombreUsuario } = useUsuario()
+    const router = useRouter()
 
-  const router = useRouter()
+    function login(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
 
-  function login() {
-
-    if (email != '' && password != '') {
-      setNombreUsuario(email)
-      router.push('/Producto')
+        if (email === 'admin' && password === 'admin123') {
+            setNombreUsuario(email)
+            setMensaje('')
+            router.push('/Producto')
+        } else {
+            setMensaje('Usuario o contraseña incorrectos')
+        }
     }
-    else {
-      alert('Usuario incorrecto')
-    }
 
+    return (
+        <div className="container d-flex justify-content-center align-items-center min-vh-100">
+            <div className="card shadow p-4" style={{ width: '400px' }}>
 
-  }
-  return (
-    <div>
-      <div>
-        <h4>Inicio de sesion</h4>
-        <form className='form'>
-          <input type="text"
-            placeholder='Ingrese su email'
-            className='form-control'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          /> <br />
+                <h3 className="text-center mb-4">
+                    Administrador de Gastos
+                </h3>
 
+                <form onSubmit={login}>
 
+                    <div className="mb-3">
+                        <label className="form-label">Usuario</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Ingrese su usuario"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
 
-          <input type='password'
-            placeholder='Ingrese contrasena'
-            className='form-control'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+                    <div className="mb-3">
+                        <label className="form-label">Contraseña</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Ingrese su contraseña"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
 
-          ></input> <br />
-          <button type='button' className='btn btn-info' onClick={login}>Iniciar sesion</button> <br />
+                    {mensaje && (
+                        <div className="alert alert-danger">
+                            {mensaje}
+                        </div>
+                    )}
 
-          <Link href="/Producto">Ir a la pagina de producto</Link> <br />
-          <Link href="/AdminProducto">Ir a la pagina de producto</Link>
-        </form>
-      </div>
-    </div>
-  )
+                    <button type="submit" className="btn btn-dark w-100">
+                        Iniciar sesión
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    )
 }
+

@@ -2,19 +2,17 @@
 'use client'
 
 import { useState } from 'react'
-import CardProducto from '@/app/Components/CardProducto'
-import { useContextProducto } from '@/app/Provider/ProviderProducto'
+import CardGasto from '@/app/Components/CardGasto'
+import PresupuestoMensual from '@/app/Components/PresupuestoMensual'
 
 export default function Page() {
-
-    const { producto } = useContextProducto()
 
     const [usuario, setUsuario] = useState('')
     const [clave, setClave] = useState('')
     const [sesionIniciada, setSesionIniciada] = useState(false)
     const [mensaje, setMensaje] = useState('')
 
-    const iniciarSesion = (e: React.FormEvent) => {
+    const iniciarSesion = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         if (usuario === 'admin' && clave === 'admin123') {
@@ -28,11 +26,10 @@ export default function Page() {
     if (!sesionIniciada) {
         return (
             <div className="container d-flex justify-content-center align-items-center min-vh-100">
-
                 <div className="card shadow p-4" style={{ width: '400px' }}>
 
                     <h2 className="text-center mb-4">
-                        Mis Gastos/Inicio de Sesion
+                        Mis Gastos / Inicio de Sesión
                     </h2>
 
                     <form onSubmit={iniciarSesion}>
@@ -84,16 +81,13 @@ export default function Page() {
                 Administrador de Gastos Personales
             </h2>
 
-            <div className="row">
-                {producto.map((item, index) => (
-                    <div
-                        className="col-md-4 mb-3"
-                        key={`${item.idProducto}-${index}`}
-                    >
-                        <CardProducto {...item} />
-                    </div>
-                ))}
-            </div>
+            <PresupuestoMensual />
+
+            <h3 className="mt-5 mb-4">
+                Gastos registrados
+            </h3>
+
+            <CardGasto />
 
         </div>
     )

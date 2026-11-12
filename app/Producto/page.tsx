@@ -1,33 +1,21 @@
+
 'use client'
-import CardProducto from '@/app/Components/CardProducto';
-import { Producto } from '@/app/modelos/Producto';
-import { useContextProducto } from '@/app/Provider/ProviderProducto'
-import React from 'react'
+
+import CardGasto from '@/app/Components/CardGasto'
 
 export default function Page() {
 
-    const { producto, agregarCarrito } = useContextProducto();
-
-
     return (
-        <div className='container'>
-            <div className='row'>
-                {
+        <div className="container mt-4">
 
-                    producto.map((producto: Producto) => (
-                        <div className='col-md-4' key={producto.idProducto}>
-                            <CardProducto {...producto}></CardProducto>
-                            <br />
+            <h2 className="mb-4">
+                Gastos registrados
+            </h2>
 
-                        </div>
-
-                    ))
-                }
-
-            </div>
-
+            <CardGasto />
 
         </div>
     )
 }
+
 

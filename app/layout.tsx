@@ -5,7 +5,7 @@ import "./globals.css";
 import "bootstrap/dist/css/bootstrap.css";
 
 import ProviderUsuario from "./Provider/ProviderUsuario";
-import ProviderProducto from "./Provider/ProviderProducto";
+import ProviderGasto from "./Provider/ProviderGasto";
 import NavBar from "./Components/NavBar";
 
 const geistSans = Geist({
@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tienda Online",
-  description: "Carrito de compras",
+  title: "Administrador de Gastos",
+  description: "Aplicación para administrar gastos personales",
 };
 
 export default function RootLayout({
@@ -32,10 +32,10 @@ export default function RootLayout({
     <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen flex flex-col">
         <ProviderUsuario>
-          <ProviderProducto>
+          <ProviderGasto>
             <NavBar />
             {children}
-          </ProviderProducto>
+          </ProviderGasto>
         </ProviderUsuario>
       </body>
     </html>
