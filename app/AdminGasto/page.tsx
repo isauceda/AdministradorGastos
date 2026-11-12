@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { Gasto } from '../modelos/Gasto'
 import { useContextGasto } from '../Provider/ProviderGasto'
 
-const URL = 'http://localhost:3000/gasto'
+const URL = 'http://localhost:5000/gasto'
 
 export default function AdminGasto() {
 

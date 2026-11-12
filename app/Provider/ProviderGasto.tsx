@@ -2,9 +2,9 @@
 'use client'
 
 import React, { useContext, useEffect, useState } from 'react'
-import { Plantilla } from '../modelos/Plantilla'
 import { Gasto } from '../modelos/Gasto'
 import { ContextGasto } from '../Context/ContextGasto'
+import { Plantilla } from '../modelos/Plantilla'
 
 const URL = 'http://localhost:5000'
 
@@ -13,21 +13,16 @@ export default function ProviderGasto({ children }: Plantilla) {
     const [gasto, setGastos] = useState<Gasto[]>([])
     const [presupuesto, setPresupuesto] = useState(0)
 
-    const [ordenCompra, setOrdenCompra] = useState(0)
-    useEffect(() => {
-    setOrdenCompra(Math.floor(Date.now() / 1000))
-}, [])
-
-    // Cargar gasto desde PostgreSQL
+    // Cargar gastos
     async function actualizarGasto() {
         try {
             const respuesta = await fetch(`${URL}/gasto`)
-            const datos = await respuesta.json()
 
             if (respuesta.ok) {
+                const datos = await respuesta.json()
                 setGastos(datos)
-            }else {
-                setGastos([])
+            } else {
+                console.log('Error al cargar gastos')
             }
 
         } catch (error) {
@@ -35,21 +30,20 @@ export default function ProviderGasto({ children }: Plantilla) {
         }
     }
 
-  
-    // Registrar un gasto
-    async function agregarGasto(gasto: Omit<Gasto, 'idgasto'>) {
+    // Agregar gasto
+    async function agregarGasto(gastoNuevo: Omit<Gasto, 'idgasto'>) {
         try {
             const respuesta = await fetch(`${URL}/gasto`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(gasto)
+                body: JSON.stringify(gastoNuevo)
             })
 
             if (respuesta.ok) {
                 alert('Gasto agregado correctamente')
-                actualizarGasto()
+                await actualizarGasto()
             } else {
                 alert('No se pudo agregar el gasto')
             }
@@ -59,16 +53,20 @@ export default function ProviderGasto({ children }: Plantilla) {
         }
     }
 
-    // eliminar gasto
+    // Eliminar gasto
     async function eliminarGasto(idgasto: number) {
         try {
-            const respuesta = await fetch(`${URL}/gasto/${idgasto}`)
-            const datos = await respuesta.json()
+            const respuesta = await fetch(`${URL}/gasto/${idgasto}`, {
+                method: 'DELETE'
+            })
 
             if (respuesta.ok) {
-              alert ('Gasto eliminado')
-                    actualizarGasto()
-    }
+                alert('Gasto eliminado correctamente')
+                await actualizarGasto()
+            } else {
+                alert('No se pudo eliminar el gasto')
+            }
+
         } catch (error) {
             console.log('Error al eliminar gasto:', error)
         }
@@ -76,7 +74,7 @@ export default function ProviderGasto({ children }: Plantilla) {
 
     // Calcular total de gastos
     const totalGastos = gasto.reduce(
-        (total, gasto) => total + Number(gasto.monto),
+        (total, item) => total + Number(item.monto),
         0
     )
 
